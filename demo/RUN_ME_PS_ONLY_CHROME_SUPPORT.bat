@@ -1,0 +1,1 @@
+start chrome.exe --args --allow-file-access-from-files %~dp0index.html

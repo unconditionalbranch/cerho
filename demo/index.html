@@ -4,6 +4,7 @@
 <head>
 <link rel="stylesheet" href="css/style.css">
 <script src="jquery203.min.js"></script>
+<script src="keypress-2.0.1.min.js"></script>
 <script src="webgl-utils.js"></script>
 <script src="utils.js"></script>
 <script src="profiler.js"></script>
@@ -15,15 +16,24 @@
 </head>
 
 <body>
+<div id="links">
+<a id="a$id" href="#" class="fullscreen" >fullscreen</a>
+<a id="b$id" href="#" class="windowed">windowed</a><br>
+</div>
 <canvas id="viewport">
 
 </canvas>
 
-<br>
-<span id="frametime"></span>
-<br>
-<span id="error"></span>
-
+<ul id="debugview" style="display:none;">
+	<li><span id="current_entry"></span></li>
+	<li><span id="current_effect"></span></li>
+	<li><span id="frametime">freimtime</span></li>
+	<li>volume: <span id="volume"></span></li>
+	<li><span id="playstate"></span></li>
+	<li>TIME: <span id="time"></span></li>
+	<li>BEATS: <span id="beats"></span></li>
+	<span id="instructions">SPACE: play/pause, R: reload shaders (doesn't work), Q: jump to beginning, ARROW KEYS: seek (hold shift for speed)</span>
+</ul>
 <script>
 function viewwidth(){
    return window.innerWidth||document.documentElement.clientWidth||document.body.clientWidth||0;
@@ -32,28 +42,84 @@ function viewheight(){
    return window.innerHeight||document.documentElement.clientHeight||document.body.clientHeight||0;
 }
 
+function getQueryParams(qs) {
+	if (qs == undefined)
+		return {};
+  qs = qs.split("+").join(" ");
+
+  var params = {}, tokens,
+  re = /[?&]?([^=]+)=([^&]*)/g;
+
+  while (tokens = re.exec(qs)) {
+	params[decodeURIComponent(tokens[1])]
+	= decodeURIComponent(tokens[2]);
+  }
+
+  return params;
+}
+
+var query = getQueryParams(window.location.search.split("?")[1]);
+
 var initialize = function (demodata) {
 	var demo = Demo;
+	var startAt = 0;
 
+	if (query && query.debug) {
+		demo.setDebugMode(true);
+	}
+
+	if (query.startAt)
+	  var startAt = parseInt(query.startAt, 10);
+
+    demo.init(
+            $('#viewport').get(0), 
+			"demo",
+            demodata,
+            function () {
+                demo.run(startAt); 
+			}
+			);
+}
+function runDemo(){
+	$( "#links" ).remove();
 	var width = viewwidth();
 	var height = width * (9.0/16.0);
 
 	$('#viewport').attr("width", width);
 	$('#viewport').attr("height", height);
-
+	$('#viewport').get(0).style.left="0px";
+	$('#viewport').get(0).style.top=((window.innerHeight-height)/2)+"px";
+	$('#viewport').get(0).style.cursor="none";
     console.log(width, height);
-
-    demo.init(
-            $('#viewport').get(0), 
-            demodata,
-            function () {
-                demo.run(); 
-            });
+	$.getJSON("demo/demo.json", null, function(data, status, jqXHR) {
+	        initialize(data);
+	        });
 }
+$("a.fullscreen").on('click', function() {
+    var docElement, request;
 
-$.getJSON("invi.json", null, function(data, status, jqXHR) {
-        initialize(data);
-        });
+    docElement = document.documentElement;
+    request = docElement.requestFullScreen || docElement.webkitRequestFullScreen || docElement.mozRequestFullScreen || docElement.msRequestFullScreen;
+
+    if(typeof request!="undefined" && request){
+        request.call(docElement);
+    }
+    runDemo();
+});
+$("a.windowed").on('click', function() {
+    var docElement, request;
+
+    docElement = document.documentElement;
+    request = docElement.cancelFullScreen|| docElement.webkitCancelFullScreen || docElement.mozCancelFullScreen || docElement.msCancelFullScreen || docElement.exitFullscreen;
+
+    if(typeof request!="undefined" && request){
+        request.call(docElement);
+    }
+    runDemo();
+});
+
+if (query.type)
+  $("a."+query.type).click();
 
 </script>
 </body>

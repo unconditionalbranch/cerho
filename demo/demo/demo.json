@@ -1,0 +1,77 @@
+{
+	"info" : {
+		"title" : "demo example"
+	},
+
+	"assets" : {
+	
+		"images" : [
+			"images/poplabel.png"
+		],
+		
+		"vertexshader" : "shaders/shader.vert",
+        "song" : {
+			"path" : "audio/music.ogg", 
+			"bpm" : 168.36735
+		},
+		
+		"fragmentshaders" : [
+			"shaders/example1.frag",
+			"shaders/example2.frag"		
+		],
+		
+		"text" : []
+	},
+
+    "textureslots" : {
+		"0" : "poplabel.png"
+    },
+	
+	"effects" : {
+		"exa1" : {
+			"shader" : "example1.frag",
+			"params" : {}
+		},
+		"exa2" : {
+			"shader" : "example2.frag",
+			"params" : {"haha":0.5}
+		},
+		"exa3" : {
+			"shader" : "example2.frag",
+			"params" : {"haha":1.0}
+		}
+	
+	}, "playlist" : {
+		"entries" : [
+
+			{
+			"effect" : "exa1",
+			"begin" : 0.0,
+			"end" : 16.0,
+			"params" : { 
+			}
+			},
+			{
+			"effect" : "exa2",
+			"begin" : 16.0,
+			"end" : 32.0,
+			"params" : { 
+			}
+			},
+			{
+			"effect" : "exa3",
+			"begin" : 32.0,
+			"end" : 48.0,
+			"params" : { 
+			}
+			},
+			{
+			"effect" : "exa2",
+			"begin" : 48.0,
+			"end" : 64.0,
+			"params" : { 
+			}
+			}
+		]
+	}
+}

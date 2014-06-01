@@ -1,18 +1,50 @@
-
 body {
     background-color: black;
     color:#fff;
     padding:0px;
     margin:0px;
+    overflow: hidden;
 }
-
+html:-moz-full-screen {
+    background: #000000;;
+}
+ 
+html:-webkit-full-screen {
+    background: #000000;;
+}
+ 
+html:fullscreen {
+    background: #000000;;
+}
+a:link {color:#FFFFFF;}      /* unvisited link */
+a:visited {color:#FFFFFF;}  /* visited link */
+a:hover {color:#8F9f9F;}  /* mouse over link */
+a:active {color:#333333;}  /* selected link */
 #viewport {
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 50px;
     left: 0px;
     right: 0px;
     padding: 0px;
     display: block;
-   
+    position: fixed;
+}
+
+#debugview {
+	font-family:monospace;
+	height:60px;
+	background-color:#222;
+}
+
+#debugview > li {
+	display:block;
+	border:1px solid white;
+	width:120px;
+	float:left;
+	padding:5px;
+	position:relative;
+}
+
+#instructions {
+	font-family:arial;
+	font-size:11px;
+	margin:5px;
 }
